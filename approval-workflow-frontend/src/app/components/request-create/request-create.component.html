@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <h2>Create New Request</h2>
+  <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" class="form-control" id="title" formControlName="title">
+      <div class="text-danger" *ngIf="requestForm.get('title')?.invalid && requestForm.get('title')?.touched">
+        Title is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+      <div class="text-danger" *ngIf="requestForm.get('description')?.invalid && requestForm.get('description')?.touched">
+        Description is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="requestedBy" class="form-label">Requested By</label>
+      <input type="text" class="form-control" id="requestedBy" formControlName="requestedBy">
+      <div class="text-danger" *ngIf="requestForm.get('requestedBy')?.invalid && requestForm.get('requestedBy')?.touched">
+        Requested By is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="requestType" class="form-label">Request Type</label>
+      <select class="form-select" id="requestType" formControlName="requestType">
+        <option *ngFor="let type of requestTypes" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="requestForm.invalid">Submit</button>
+  </form>
+  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+</div>

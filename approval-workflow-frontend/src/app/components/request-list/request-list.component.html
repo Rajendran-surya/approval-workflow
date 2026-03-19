@@ -1,0 +1,64 @@
+<div class="container mt-4">
+  <h2>Requests</h2>
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <label for="statusFilter" class="form-label">Filter by Status</label>
+      <select id="statusFilter" class="form-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+        <option value="">All</option>
+        <option *ngFor="let opt of statusOptions" [value]="opt">{{ opt }}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="typeFilter" class="form-label">Filter by Type</label>
+      <select id="typeFilter" class="form-select" [(ngModel)]="typeFilter" (change)="onFilterChange()">
+        <option value="">All</option>
+        <option *ngFor="let opt of typeOptions" [value]="opt">{{ opt }}</option>
+      </select>
+    </div>
+    <div class="col-md-3 align-self-end">
+      <button class="btn btn-secondary" (click)="statusFilter=''; typeFilter=''; onFilterChange()">Clear Filters</button>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label>Current Role: </label>
+    <select [(ngModel)]="role" class="form-select w-auto d-inline-block ms-2">
+      <option value="USER">User</option>
+      <option value="MANAGER">Manager</option>
+    </select>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Requested By</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th *ngIf="role === 'MANAGER'">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of requests">
+        <td>{{ req.id }}</td>
+        <td>{{ req.title }}</td>
+        <td>{{ req.description }}</td>
+        <td>{{ req.requestedBy }}</td>
+        <td>{{ req.requestType }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'bg-warning': req.status === 'PENDING',
+            'bg-success': req.status === 'APPROVED',
+            'bg-danger': req.status === 'REJECTED'
+          }">{{ req.status }}</span>
+        </td>
+        <td>{{ req.createdAt | date:'short' }}</td>
+        <td *ngIf="role === 'MANAGER' && req.status === 'PENDING'">
+          <button class="btn btn-success btn-sm me-2" (click)="approveRequest(req.id!)">Approve</button>
+          <button class="btn btn-danger btn-sm" (click)="rejectRequest(req.id!)">Reject</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
